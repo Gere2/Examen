@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de biblioteca</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Biblioteca</h1>
+
+        <form action="/agregar_libro" method="post" onsubmit="return validarFormulario(event);">
+            <input type="text" name="tipo_libro" placeholder="Tipo de libro (ficcion, no_ficcion)" required>
+            <input type="text" name="titulo" placeholder="Título" required>
+            <input type="text" name="autor" placeholder="Autor" required>
+            <input type="date" name="fecha_publicacion" placeholder="Fecha de publicación" required>
+            <input type="text" name="num_paginas" placeholder="Número de páginas" required>
+            <input type="text" name="genero" placeholder="Género (sólo para ficción)">
+            <input type="text" name="num_capitulos" placeholder="Número de capítulos (sólo para ficción)">
+            <input type="text" name="tema" placeholder="Tema (sólo para no ficción)">
+            <input type="text" name="num_secciones" placeholder="Número de secciones (sólo para no ficción)">
+            <button type="submit" value="Agregar libro">Agregar libro</button>
+            {% if error %}
+            <div class="error">{{ error }}</div>
+            {% endif %}
+        </form>
+
+        <br>
+        <h3>Eliminar de libros</h3>
+        <form action="/eliminar_libro" method="post">
+            <input type="text" name="titulo" placeholder="Título del libro a eliminar" required>
+            <button type="submit">Eliminar libro</button>
+        </form>
+        <br>
+
+        <h3>Buscar libros</h3>
+        <form action="/buscar_libro" method="get">
+            <input type="text" name="titulo" placeholder="Título del libro a buscar" required>
+            <button type="submit">Buscar libro</button>
+        </form>
+
+        {% if libro %}
+            <div class="libro-info">
+                <img src="{{ libro.imagen }}" alt="{{ libro.titulo }}">
+                <div class="libro-details">
+                    <h2>{{ libro.titulo }}</h2>
+                    <p><strong>Autor:</strong> {{ libro.autor }}</p>
+                    <p><strong>Fecha de publicación:</strong> {{ libro.fecha_publicacion }}</p>
+                    <p><strong>Número de páginas:</strong> {{ libro.num_paginas }}</p>
+                    {% if libro.__class__.__name__ == 'LibroFiccion' %}
+                        <p><strong>Género:</strong> {{ libro.genero }}</p>
+                        <p><strong>Capítulos:</strong> {{ libro.num_capitulos }}</p>
+                    {% else %}
+                        <p><strong>Tema:</strong> {{ libro.tema }}</p>
+                        <p><strong>Secciones:</strong> {{ libro.num_secciones }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+
+       <h2>Lista de libros</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Autor</th>
+                    <th>Fecha de publicación</th>
+                    <th>Número de páginas</th>
+                    <th>Género / Tema</th>
+                    <th>Capítulos / Secciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for libro in libros %}
+                {% if libro.__class__.__name__ == 'LibroFiccion' %}
+                <tr>
+                    <td>{{ libro.titulo }}</td>
+                    <td>{{ libro.autor }}</td>
+                    <td>{{ libro.fecha_publicacion }}</td>
+                    <td>{{ libro.num_paginas }}</td>
+                    <td>{{ libro.genero }}</td>
+                    <td>{{ libro.num_capitulos }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td>{{ libro.titulo }}</td>
+                    <td>{{ libro.autor }}</td>
+                    <td>{{ libro.fecha_publicacion }}</td>
+                    <td>{{ libro.num_paginas }}</td>
+                    <td>{{ libro.tema }}</td>
+                    <td>{{ libro.num_secciones }}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</body>
+
+

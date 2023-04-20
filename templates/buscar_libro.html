@@ -1,0 +1,26 @@
+{% extends "index.html" %}
+
+{% block content %}
+  <div class="container">
+    {% if libro %}
+      <div class="libro-info">
+        <img src="{{ libro.imagen }}" alt="{{ libro.titulo }}">
+        <div class="libro-details">
+          <h2>{{ libro.titulo }}</h2>
+          <p><strong>Autor:</strong> {{ libro.autor }}</p>
+          <p><strong>Fecha de publicación:</strong> {{ libro.fecha_publicacion }}</p>
+          <p><strong>Número de páginas:</strong> {{ libro.num_paginas }}</p>
+          {% if libro.__class__.__name__ == 'LibroFiccion' %}
+            <p><strong>Género:</strong> {{ libro.genero }}</p>
+            <p><strong>Capítulos:</strong> {{ libro.num_capitulos }}</p>
+          {% else %}
+            <p><strong>Tema:</strong> {{ libro.tema }}</p>
+            <p><strong>Secciones:</strong> {{ libro.num_secciones }}</p>
+          {% endif %}
+        </div>
+      </div>
+    {% else %}
+      <div class="error">No se encontró el libro con el título especificado.</div>
+    {% endif %}
+  </div>
+{% endblock %}
